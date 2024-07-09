@@ -1,7 +1,16 @@
+import { Board, Container, Layout } from "@/components";
 import "./App.css";
+import { Controls } from "./components/Controls";
 
 function App() {
-  return <div>Hello Sekai!</div>;
+  return (
+    <Layout>
+      <Container>
+        <Board />
+        <Controls />
+      </Container>
+    </Layout>
+  );
 }
 
 export default App;
