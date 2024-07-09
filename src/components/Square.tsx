@@ -12,8 +12,8 @@ export const Square: Component<Props> = (props) => {
   return (
     <button
       onClick={() => onSquareClick(props.rowIndex(), props.colIndex())}
-      class="btn aspect-square text-6xl"
       classList={{
+        "btn aspect-square text-6xl square": true,
         "text-info": props.value == SQUARE_X,
         "text-error": props.value == SQUARE_O,
       }}

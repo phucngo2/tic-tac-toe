@@ -3,7 +3,7 @@ import { generateNewBoard } from "@/utils";
 import { createStore } from "solid-js/store";
 
 export const boardStoreInitialValue: BoardStore = {
-  squares: generateNewBoard(3, 3),
+  squares: generateNewBoard(),
 };
 
 const [boardStore, setBoardStore] = createStore(boardStoreInitialValue);

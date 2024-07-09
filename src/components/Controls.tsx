@@ -1,3 +1,4 @@
+import { resetBoard } from "@/utils";
 import { Component } from "solid-js";
 
 interface Props {}
@@ -5,7 +6,12 @@ interface Props {}
 export const Controls: Component<Props> = () => {
   return (
     <div class="flex flex-row items-center justify-center">
-      <button class="btn btn-primary">Play again!</button>
+      <button
+        onClick={resetBoard}
+        class="btn btn-primary h-[2.6rem] min-h-[2.6rem]"
+      >
+        Reset!
+      </button>
     </div>
   );
 };
