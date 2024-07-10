@@ -1,21 +1,28 @@
 import { Move, PlayerValue, Score, SquareValue } from "@/types";
-import { getEmptySquares, hasWon, isComputerWon, isHumanWon } from "./game";
+import {
+  getEmptySquares,
+  hasWon,
+  hasComputerWon,
+  hasHumanWon,
+} from "./result-evaluation";
 import { playerStore } from "@/stores";
 
 export function minimax(
   newSquares: SquareValue[][],
   player: PlayerValue
 ): Move | Score {
-  // Check for terminal state
+  // 1. Return a value if a terminal state is found (+10, 0, -10)
   let wonMark = hasWon(newSquares);
   if (wonMark) {
-    if (isHumanWon(wonMark)) {
-      return { score: -10 };
+    if (hasHumanWon(wonMark)) {
+      return { score: -420 };
     }
-    if (isComputerWon(wonMark)) {
-      return { score: 10 };
+    if (hasComputerWon(wonMark)) {
+      return { score: 420 };
     }
   }
+
+  // 2. Go through empty squares on the board
 
   const emptySquares = getEmptySquares(newSquares);
   const emptySquaresLength = emptySquares.length;
@@ -39,7 +46,7 @@ export function minimax(
     let temp = newSquares[currentRow][currentCol];
     newSquares[currentRow][currentCol] = player;
 
-    // Recursive call
+    // 3. Call the minimax function on each available spot (recursion)
     let res = minimax(
       newSquares,
       player === playerStore.computer ? playerStore.human : playerStore.computer
@@ -53,7 +60,7 @@ export function minimax(
     moves.push(move);
   }
 
-  // Find the best move
+  // 4. Find the best move
   let bestMove: Move = moves[0];
   let bestScore =
     player === playerStore.computer
@@ -74,5 +81,6 @@ export function minimax(
     }
   }
 
+  // 5. Return the best move
   return bestMove;
 }
