@@ -15,8 +15,9 @@ import {
   setIsPlayable,
   setTitle,
 } from "@/stores";
-import { checkEqual, generate2dArray } from "./helpers";
-import { SquareCordinate, SquareValue } from "@/types";
+import { checkEqual, deepCopy, generate2dArray } from "./helpers";
+import { PlayerValue, SquareCordinate, SquareValue } from "@/types";
+import { minimax } from "./minimax";
 
 export function generateNewBoard() {
   return generate2dArray(BOARD_SIZE, BOARD_SIZE, SQUARE_EMPTY);
@@ -28,8 +29,7 @@ export function resetBoard() {
   setIsPlayable(true);
 }
 
-export function hasWon() {
-  const squares = boardStore.squares;
+export function hasWon(squares: SquareValue[][]) {
   return checkRowsAndCols(squares) || checkDiagonal(squares);
 }
 
@@ -63,25 +63,30 @@ export function isHumanWon(wonMark: string) {
 }
 
 export function evaluateResult() {
-  if (isTie()) {
-    setIsPlayable(false);
-    setTitle(RESULT_TIE);
-    return;
-  }
-  let wonMark = hasWon();
+  let wonMark = hasWon(boardStore.squares);
   if (wonMark) {
     setIsPlayable(false);
     setTitle(wonMark);
-    return;
+    return true;
   }
+  if (isTie()) {
+    setIsPlayable(false);
+    setTitle(RESULT_TIE);
+    return true;
+  }
+  return false;
+}
+
+export function move(rowIndex: number, colIndex: number, player: PlayerValue) {
+  setBoardStore("squares", rowIndex, colIndex, player);
 }
 
 export function humanPlay(rowIndex: number, colIndex: number) {
-  setBoardStore("squares", rowIndex, colIndex, playerStore.human);
+  move(rowIndex, colIndex, playerStore.human);
 }
 
 export function computerPlay(rowIndex: number, colIndex: number) {
-  setBoardStore("squares", rowIndex, colIndex, playerStore.computer);
+  move(rowIndex, colIndex, playerStore.computer);
 }
 
 export function onSquareClick(rowIndex: number, colIndex: number) {
@@ -92,6 +97,15 @@ export function onSquareClick(rowIndex: number, colIndex: number) {
     return;
   }
   humanPlay(rowIndex, colIndex);
+  if (evaluateResult()) {
+    return;
+  }
+
+  let clonedSquares = deepCopy(boardStore.squares);
+  let bestMove = minimax(clonedSquares, playerStore.computer);
+  if ("row" in bestMove) {
+    computerPlay(bestMove.row, bestMove.col);
+  }
   evaluateResult();
 }
 

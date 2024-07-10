@@ -5,13 +5,9 @@ import { playerStore } from "@/stores";
 export function minimax(
   newSquares: SquareValue[][],
   player: PlayerValue
-): Score {
-  // 1. Return a value if a terminal state is found (+10, 0, -10)
-
-  const emptySquares = getEmptySquares(newSquares);
-  const emptySquaresLength = emptySquares.length;
-
-  let wonMark = hasWon();
+): Move | Score {
+  // Check for terminal state
+  let wonMark = hasWon(newSquares);
   if (wonMark) {
     if (isHumanWon(wonMark)) {
       return { score: -10 };
@@ -20,51 +16,57 @@ export function minimax(
       return { score: 10 };
     }
   }
-  if (!emptySquaresLength) return { score: 0 };
 
-  // 2. Go through available spots (emty squares) on the board
+  const emptySquares = getEmptySquares(newSquares);
+  const emptySquaresLength = emptySquares.length;
+  if (emptySquaresLength === 0) {
+    return { score: 0 };
+  }
 
+  // Array to store all possible moves
   const moves: Move[] = [];
+
   for (let emptySquare of emptySquares) {
     let currentRow = emptySquare.row;
     let currentCol = emptySquare.col;
-    let temp = newSquares[currentRow][currentCol];
+
     let move: Move = {
-      col: currentCol,
       row: currentRow,
+      col: currentCol,
       score: 0,
     };
+
+    let temp = newSquares[currentRow][currentCol];
     newSquares[currentRow][currentCol] = player;
 
-    // 3. Call the minimax function on each available spots (recursion)
-
-    if (player == playerStore.computer) {
-      let res = minimax(newSquares, playerStore.human);
-      move.score = res.score;
-    } else {
-      let res = minimax(newSquares, playerStore.computer);
-      move.score = res.score;
-    }
+    // Recursive call
+    let res = minimax(
+      newSquares,
+      player === playerStore.computer ? playerStore.human : playerStore.computer
+    );
+    move.score = res.score;
 
     // Reset the square
     newSquares[currentRow][currentCol] = temp;
+
+    // Push the move to the moves array
     moves.push(move);
   }
 
-  // 4. Evaluate returning values
+  // Find the best move
+  let bestMove: Move = moves[0];
+  let bestScore =
+    player === playerStore.computer
+      ? Number.MIN_SAFE_INTEGER
+      : Number.MAX_SAFE_INTEGER;
 
-  let bestMove = moves[0];
-  if (player == playerStore.computer) {
-    let bestScore = Number.MIN_SAFE_INTEGER;
-    for (let move of moves) {
+  for (let move of moves) {
+    if (player === playerStore.computer) {
       if (move.score > bestScore) {
         bestScore = move.score;
         bestMove = move;
       }
-    }
-  } else {
-    let bestScore = Number.MAX_SAFE_INTEGER;
-    for (let move of moves) {
+    } else {
       if (move.score < bestScore) {
         bestScore = move.score;
         bestMove = move;
@@ -72,6 +74,5 @@ export function minimax(
     }
   }
 
-  // 5. Return the best value
   return bestMove;
 }
