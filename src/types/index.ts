@@ -11,3 +11,11 @@ export interface SquareCordinate {
   row: number;
   col: number;
 }
+
+export type PlayerValue = "X" | "O";
+
+export interface Score {
+  score: number;
+}
+
+export interface Move extends SquareCordinate, Score {}
