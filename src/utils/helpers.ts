@@ -7,3 +7,8 @@ export const generate2dArray = (
     Array(numberOfCols).fill(fill)
   );
 };
+
+export const checkEqual = (...args: string[]) => {
+  const first = args[0];
+  return args.every((val) => !!val && val === first);
+};
