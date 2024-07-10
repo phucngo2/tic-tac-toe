@@ -54,12 +54,12 @@ export function isTie() {
   return getEmptySquares(boardStore.squares).length == 0;
 }
 
-export function isComputerWon(won_mark: string) {
-  return won_mark == playerStore.computer;
+export function isComputerWon(wonMark: string) {
+  return wonMark == playerStore.computer;
 }
 
-export function isHumanWon(won_mark: string) {
-  return won_mark == playerStore.human;
+export function isHumanWon(wonMark: string) {
+  return wonMark == playerStore.human;
 }
 
 export function evaluateResult() {
@@ -68,10 +68,10 @@ export function evaluateResult() {
     setTitle(RESULT_TIE);
     return;
   }
-  let won_mark = hasWon();
-  if (won_mark) {
+  let wonMark = hasWon();
+  if (wonMark) {
     setIsPlayable(false);
-    setTitle(won_mark);
+    setTitle(wonMark);
     return;
   }
 }
