@@ -54,6 +54,14 @@ export function isTie() {
   return getEmptySquares(boardStore.squares).length == 0;
 }
 
+export function isComputerWon(won_mark: string) {
+  return won_mark == playerStore.computer;
+}
+
+export function isHumanWon(won_mark: string) {
+  return won_mark == playerStore.human;
+}
+
 export function evaluateResult() {
   if (isTie()) {
     setIsPlayable(false);
@@ -69,11 +77,11 @@ export function evaluateResult() {
 }
 
 export function humanPlay(rowIndex: number, colIndex: number) {
-  setBoardStore("squares", rowIndex, colIndex, playerStore.squareHuman);
+  setBoardStore("squares", rowIndex, colIndex, playerStore.human);
 }
 
 export function computerPlay(rowIndex: number, colIndex: number) {
-  setBoardStore("squares", rowIndex, colIndex, playerStore.squareComputer);
+  setBoardStore("squares", rowIndex, colIndex, playerStore.computer);
 }
 
 export function onSquareClick(rowIndex: number, colIndex: number) {

@@ -15,10 +15,8 @@ export const Title: Component<Props> = () => {
       }}
     >
       <Switch fallback={title()}>
-        <Match when={title() == playerStore.squareComputer}>
-          Computer Won!
-        </Match>
-        <Match when={title() == playerStore.squareHuman}>Human Won!</Match>
+        <Match when={title() == playerStore.computer}>Computer Won!</Match>
+        <Match when={title() == playerStore.human}>Human Won!</Match>
       </Switch>
       {}
     </h1>
