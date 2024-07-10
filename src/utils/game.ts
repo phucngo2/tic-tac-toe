@@ -16,6 +16,7 @@ import {
   setTitle,
 } from "@/stores";
 import { checkEqual, generate2dArray } from "./helpers";
+import { SquareCordinate, SquareValue } from "@/types";
 
 export function generateNewBoard() {
   return generate2dArray(BOARD_SIZE, BOARD_SIZE, SQUARE_EMPTY);
@@ -32,15 +33,25 @@ export function hasWon() {
   return checkRowsAndCols(squares) || checkDiagonal(squares);
 }
 
-export function isTie() {
+export function getEmptySquares(squares: SquareValue[][]): SquareCordinate[] {
+  const emptySquares: SquareCordinate[] = [];
+
   for (let i = 0; i < BOARD_ROWS; i++) {
     for (let j = 0; j < BOARD_COLS; j++) {
-      if (boardStore.squares[i][j] == SQUARE_EMPTY) {
-        return false;
+      if (squares[i][j] == SQUARE_EMPTY) {
+        emptySquares.push({
+          row: i,
+          col: j,
+        });
       }
     }
   }
-  return true;
+
+  return emptySquares;
+}
+
+export function isTie() {
+  return getEmptySquares(boardStore.squares).length == 0;
 }
 
 export function evaluateResult() {
@@ -76,7 +87,7 @@ export function onSquareClick(rowIndex: number, colIndex: number) {
   evaluateResult();
 }
 
-function checkRowsAndCols(squares: string[][]) {
+function checkRowsAndCols(squares: SquareValue[][]) {
   for (let i = 0; i < WIN_CONDITION; i++) {
     // Check rows
     if (checkEqual(...squares[i])) {
@@ -94,7 +105,7 @@ function checkRowsAndCols(squares: string[][]) {
   return null;
 }
 
-function checkDiagonal(squares: string[][]) {
+function checkDiagonal(squares: SquareValue[][]) {
   const diagonalValues = [];
   const antiDiagonalValues = [];
   for (let i = 0; i < WIN_CONDITION; i++) {
