@@ -1,5 +1,5 @@
 # 📚 Tic Tac Toe AI
-An "AI" capable of always winning or drawing in a 3x3 Tic Tac Toe game, achieved through the implementation of the minimax algorithm.
+An "AI" that guarantees a win or draw in a 3x3 Tic Tac Toe game, achieved through implementation of the minimax algorithm and optimized with Alpha-Beta pruning.
 
 The UI is built with SolidJS, TypeScript, Vite, TailwindCSS, and DaisyUI **(definitely over-engineered!)**.
 ## Built With
