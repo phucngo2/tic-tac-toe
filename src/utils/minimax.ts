@@ -1,11 +1,7 @@
-import { Move, PlayerValue, Score, SquareValue } from "@/types";
-import {
-  getEmptySquares,
-  hasWon,
-  hasComputerWon,
-  hasHumanWon,
-} from "./result-evaluation";
+import { BOARD_COLS, BOARD_ROWS, SQUARE_EMPTY } from "@/config";
 import { playerStore } from "@/stores";
+import { Move, PlayerValue, Score, SquareValue } from "@/types";
+import { hasComputerWon, hasHumanWon, hasWon } from "./result-evaluation";
 
 export function minimax(
   newSquares: SquareValue[][],
@@ -24,80 +20,58 @@ export function minimax(
     }
   }
 
-  // 2. Go through empty squares on the board
-
-  const emptySquares = getEmptySquares(newSquares);
-  const emptySquaresLength = emptySquares.length;
-  if (emptySquaresLength === 0) {
-    return { score: 0 };
-  }
-
-  // Array to store all possible moves
-  const moves: Move[] = [];
-
-  for (let emptySquare of emptySquares) {
-    let currentRow = emptySquare.row;
-    let currentCol = emptySquare.col;
-
-    let move: Move = {
-      row: currentRow,
-      col: currentCol,
-      score: 0,
-    };
-
-    let temp = newSquares[currentRow][currentCol];
-    newSquares[currentRow][currentCol] = player;
-
-    // 3. Call the minimax function on each available spot (recursion)
-    let res = minimax(
-      newSquares,
+  let bestMove: Move | Score = {
+    score:
       player === playerStore.computer
-        ? playerStore.human
-        : playerStore.computer,
-      alpha,
-      beta
-    );
-    move.score = res.score;
+        ? Number.MIN_SAFE_INTEGER
+        : Number.MAX_SAFE_INTEGER,
+  };
 
-    // Reset the square
-    newSquares[currentRow][currentCol] = temp;
+  // 2. Go through empty squares on the board
+  for (let row = 0; row < BOARD_ROWS; row++) {
+    for (let col = 0; col < BOARD_COLS; col++) {
+      if (newSquares[row][col] !== SQUARE_EMPTY) continue;
 
-    // Push the move to the moves array
-    moves.push(move);
+      newSquares[row][col] = player;
 
-    // 6. Alpha-Beta pruning
-    if (player === playerStore.computer) {
-      alpha = Math.max(alpha, move.score);
-    } else {
-      beta = Math.min(beta, move.score);
-    }
-    // Stop evaluating further branches if beta <= alpha
-    if (beta <= alpha) {
-      break;
+      // 3. Call the minimax function on each available spot (recursion)
+      let move = minimax(
+        newSquares,
+        player === playerStore.computer
+          ? playerStore.human
+          : playerStore.computer,
+        alpha,
+        beta
+      );
+
+      // Reset the square
+      newSquares[row][col] = SQUARE_EMPTY;
+
+      // 4. Find the best move
+      if (
+        player === playerStore.computer
+          ? move.score > bestMove.score
+          : move.score < bestMove.score
+      ) {
+        bestMove = {
+          score: move.score,
+          row,
+          col,
+        };
+      }
+
+      // 5. Alpha-Beta pruning
+      if (player === playerStore.computer) {
+        alpha = Math.max(alpha, move.score);
+      } else {
+        beta = Math.min(beta, move.score);
+      }
+      if (beta <= alpha) {
+        break;
+      }
     }
   }
 
-  // 4. Find the best move
-  let bestMove: Move = moves[0];
-  let bestScore =
-    player === playerStore.computer
-      ? Number.MIN_SAFE_INTEGER
-      : Number.MAX_SAFE_INTEGER;
-
-  for (let move of moves) {
-    if (player === playerStore.computer) {
-      if (move.score > bestScore) {
-        bestScore = move.score;
-        bestMove = move;
-      }
-    } else {
-      if (move.score < bestScore) {
-        bestScore = move.score;
-        bestMove = move;
-      }
-    }
-  }
-
-  // 5. Return the best move
-  return bestMove;
+  // 6. Return the best move
+  return "row" in bestMove && "col" in bestMove ? bestMove : { score: 0 }; // score 0 means the game is tie!
 }
