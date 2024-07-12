@@ -19,3 +19,13 @@ export interface Score {
 }
 
 export interface Move extends SquareCordinate, Score {}
+
+export interface PlayerStore {
+  human: PlayerValue;
+  computer: PlayerValue;
+}
+
+export interface GameSettings {
+  isComputerMoveFirst: boolean;
+  isComputerPlayX: boolean;
+}
