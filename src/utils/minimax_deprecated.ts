@@ -10,7 +10,7 @@ import { playerStore } from "@/stores";
 /**
  * @deprecated THE METHOD SHOULD NOT BE USED 📚 FOR REFERENCE ONLY 📚
  */
-function minimax(
+export function _minimax(
   newSquares: SquareValue[][],
   player: PlayerValue,
   alpha: number = Number.MIN_SAFE_INTEGER,
@@ -52,7 +52,7 @@ function minimax(
     newSquares[currentRow][currentCol] = player;
 
     // 3. Call the minimax function on each available spot (recursion)
-    let res = minimax(
+    let res = _minimax(
       newSquares,
       player === playerStore.computer
         ? playerStore.human
