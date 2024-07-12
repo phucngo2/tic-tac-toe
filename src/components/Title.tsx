@@ -1,4 +1,10 @@
-import { RESULT_TIE, SQUARE_O, SQUARE_X } from "@/config";
+import {
+  RESULT_COMPUTER_WON,
+  RESULT_HUMAN_WON,
+  RESULT_TIE,
+  SQUARE_O,
+  SQUARE_X,
+} from "@/config";
 import { playerStore, title } from "@/stores";
 import { Component, Match, Switch } from "solid-js";
 
@@ -15,8 +21,10 @@ export const Title: Component<Props> = () => {
       }}
     >
       <Switch fallback={title()}>
-        <Match when={title() == playerStore.computer}>Computer Won!</Match>
-        <Match when={title() == playerStore.human}>Human Won!</Match>
+        <Match when={title() == playerStore.computer}>
+          {RESULT_COMPUTER_WON}
+        </Match>
+        <Match when={title() == playerStore.human}>{RESULT_HUMAN_WON}</Match>
       </Switch>
       {}
     </h1>

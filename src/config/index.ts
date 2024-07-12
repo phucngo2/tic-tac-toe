@@ -13,4 +13,6 @@ export const BOARD_ROWS = BOARD_SIZE;
 export const BOARD_COLS = BOARD_SIZE;
 export const WIN_CONDITION = BOARD_SIZE;
 
-export const RESULT_TIE = "Tie!!!";
+export const RESULT_TIE = "Tie!";
+export const RESULT_COMPUTER_WON = "Computer Won!";
+export const RESULT_HUMAN_WON = "Human Won!";
