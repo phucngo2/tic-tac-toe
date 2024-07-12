@@ -1,12 +1,15 @@
 {
   "name": "tic-tac-toe",
   "private": true,
-  "version": "0.0.0",
+  "version": "1.0.0",
+  "homepage": "https://phucngo2.github.io/tic-tac-toe",
   "type": "module",
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build"
   },
   "dependencies": {
     "solid-js": "^1.8.17"
@@ -14,6 +17,7 @@
   "devDependencies": {
     "autoprefixer": "^10.4.19",
     "daisyui": "^4.12.10",
+    "gh-pages": "^6.1.1",
     "postcss": "^8.4.39",
     "tailwindcss": "^3.4.4",
     "typescript": "^5.2.2",
