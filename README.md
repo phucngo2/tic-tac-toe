@@ -9,5 +9,4 @@ The UI is built with SolidJS, TypeScript, Vite, TailwindCSS, and DaisyUI **(defi
 ![TailwindCSS](https://img.shields.io/badge/tailwindcss-%2338B2AC.svg?style=for-the-badge&logo=tailwind-css&logoColor=white)
 ![DaisyUI](https://img.shields.io/badge/daisyui-5A0EF8?style=for-the-badge&logo=daisyui&logoColor=white)
 ## 🎯 To-Dos
-- [ ] Allow the player to choose whether the computer goes first or the human goes first.
 - [ ] Deploy on GitHub Pages.
